@@ -1,6 +1,6 @@
 import uasyncio as asyncio
 from machine import Pin
-import onewire
+from onewire import OneWire, OneWireError
 import ds18x20
 
 
@@ -13,7 +13,7 @@ class TempSensorDS18B20:
         Tested on ESP32 MCUs
         :param pin_num: Digital input pin number for reading measurements
         """
-        one_wire = onewire.OneWire(Pin(pin_num))
+        one_wire = OneWire(Pin(pin_num))
         self.channel = ds18x20.DS18X20(one_wire)
 
     async def read_first_celsius(self, delay_ms=750) -> float:
@@ -23,19 +23,25 @@ class TempSensorDS18B20:
         The order is not guaranteed so works best with only one sensor
         """
         readings = await self.read_all_celsius(delay_ms)
-        return readings[0]
+        if len(readings) != 0:
+            return readings[0]
+        else:
+            return -1.0
 
     async def read_all_celsius(self, delay_ms=750) -> list:
         """
         :param delay_ms: a set delay before the reading is done
         :return: readings for all the sensors on the same channel/pin
         """
-        sensors = self.channel.scan()
-        print("IS SENSORS EMPTY?", sensors)
-        self.channel.convert_temp()
-        await asyncio.sleep_ms(delay_ms)
         readings = []
-        for sensor in sensors:
-            readings.append(self.channel.read_temp(sensor))
+        try:
+            sensors = self.channel.scan()
+            self.channel.convert_temp()
+            await asyncio.sleep_ms(delay_ms)
+            for sensor in sensors:
+                readings.append(self.channel.read_temp(sensor))
+        except OneWireError:
+            print("TempSensorDS18B20 - Error! Unable to read temp sensor(s): OneWireError")
         return readings
+
 
