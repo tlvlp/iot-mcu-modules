@@ -16,6 +16,10 @@ class TempSensorDS18B20:
         one_wire = OneWire(Pin(pin_num))
         self.channel = ds18x20.DS18X20(one_wire)
 
+    def get_prefix(self) -> str:
+        """ :return: the string prefix to identify this module """
+        return "ds18b20|"
+
     async def read_first_celsius(self, delay_ms=750) -> float:
         """
         :param delay_ms: a set delay before the reading is done

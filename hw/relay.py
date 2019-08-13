@@ -23,6 +23,10 @@ class Relay:
             self.state_is_persisted = True
             self.load_state()
 
+    def get_prefix(self) -> str:
+        """ :return: the string prefix to identify this module """
+        return "relay|"
+
     def get_off_state(self) -> int:
         if self.active_at == 0:
             return 1

@@ -16,6 +16,10 @@ class LightSensorGl5528:
         self.sensor.atten(ADC.ATTN_11DB)
         self.sensor.width(ADC.WIDTH_10BIT)
 
+    def get_prefix(self) -> str:
+        """ :return: the string prefix to identify this module """
+        return "gl5528|"
+
     def read_percent(self) -> int:
         """ :return: the percentage of the read value, using integer rounding """
         analog_read = self.sensor.read()

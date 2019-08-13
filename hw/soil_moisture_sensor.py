@@ -21,6 +21,10 @@ class SoilMoistureSensor:
         self.sensor.atten(ADC.ATTN_11DB)
         self.sensor.width(ADC.WIDTH_10BIT)
 
+    def get_prefix(self) -> str:
+        """ :return: the string prefix to identify this module """
+        return "somo_1|"
+
     def read_percent(self) -> int:
         """ :return: the percentage of the read value, using integer rounding """
         if self.power_control:
