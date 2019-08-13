@@ -6,21 +6,19 @@ import ds18x20
 
 class TempSensorDS18B20:
 
-    def __init__(self, pin_num: int) -> None:
+    def __init__(self, name: str, pin_num: int) -> None:
         """
         Digital temp sensor DS18B20 for the tlvlp.iot project
 
         Tested on ESP32 MCUs
         :param pin_num: Digital input pin number for reading measurements
         """
+        self.reference = "ds18b20|" + name
         one_wire = OneWire(Pin(pin_num))
         self.channel = ds18x20.DS18X20(one_wire)
 
-    def get_prefix(self) -> str:
-        """ :return: the string prefix to identify this module """
-        return "ds18b20|"
 
-    async def read_first_celsius(self, delay_ms=750) -> float:
+    async def read_first_celsius(self, delay_ms=750) -> tuple:
         """
         :param delay_ms: a set delay before the reading is done
         :return: readings from the first sensor on the pin
@@ -28,9 +26,9 @@ class TempSensorDS18B20:
         """
         readings = await self.read_all_celsius(delay_ms)
         if len(readings) != 0:
-            return readings[0]
+            return self.reference, readings[0]
         else:
-            return -1.0
+            return self.reference, -1.0
 
     async def read_all_celsius(self, delay_ms=750) -> list:
         """

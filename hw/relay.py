@@ -3,7 +3,7 @@ from machine import Pin
 
 class Relay:
 
-    def __init__(self, pin_num: int, active_at: int, persist_path=None) -> None:
+    def __init__(self, name: str, pin_num: int, active_at: int, persist_path=None) -> None:
         """
         Relay control for the tlvlp.iot project
 
@@ -12,6 +12,7 @@ class Relay:
         :param active_at: the relay is either active at a HIGH(1) or LOW(0) Pin state
         :param persist_path: If a path is provided the relay's state will be persisted to and loaded from there.
         """
+        self.reference = "relay|" + name
         self.state_str = "No state set"
         self.active_at = active_at
         self.persist_path = persist_path
@@ -23,19 +24,15 @@ class Relay:
             self.state_is_persisted = True
             self.load_state()
 
-    def get_prefix(self) -> str:
-        """ :return: the string prefix to identify this module """
-        return "relay|"
-
     def get_off_state(self) -> int:
         if self.active_at == 0:
             return 1
         else:
             return 0
 
-    def get_state_str(self) -> str:
-        """ Returns a string with the current relay state that is either 'on' or 'off' """
-        return self.state_str
+    def get_state(self) -> tuple:
+        """ Returns a tuple with the reference name and the current relay state that is either 'on' or 'off' """
+        return self.reference, self.state_str
 
     def relay_on(self) -> None:
         """ Switches the relay on """
