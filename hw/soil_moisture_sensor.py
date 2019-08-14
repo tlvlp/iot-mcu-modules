@@ -33,7 +33,7 @@ class SoilMoistureSensor:
         analog_read = self.sensor.read()
         if self.power_control:
             self.power.off()
-        return self.get_reference(), self.convert_to_percent(analog_read)
+        return self.reference, self.convert_to_percent(analog_read)
 
     def convert_to_percent(self, reading) -> int:
         return int((1023 - reading) / 10.23)

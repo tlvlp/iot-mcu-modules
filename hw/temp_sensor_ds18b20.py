@@ -17,7 +17,6 @@ class TempSensorDS18B20:
         one_wire = OneWire(Pin(pin_num))
         self.channel = ds18x20.DS18X20(one_wire)
 
-
     async def read_first_celsius(self, delay_ms=750) -> tuple:
         """
         :param delay_ms: a set delay before the reading is done
@@ -43,7 +42,9 @@ class TempSensorDS18B20:
             for sensor in sensors:
                 readings.append(self.channel.read_temp(sensor))
         except OneWireError:
-            print("TempSensorDS18B20 - Error! Unable to read temp sensor(s): OneWireError")
+            error = "TempSensorDS18B20 - Error! Unable to read temp sensor(s): OneWireError"
+            print(error)
+            raise OneWireError(error)
         return readings
 
 
