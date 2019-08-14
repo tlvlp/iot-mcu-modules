@@ -10,7 +10,7 @@ class Relay:
         Tested on ESP32 MCUs
         :param pin_num: digital output pin to control the relay
         :param active_at: the relay is either active at a HIGH(1) or LOW(0) Pin state
-        :param persist_path: If a path is provided the relay's state will be persisted to and loaded from there.
+        :param persist_path: if a path is provided the relay's state will be persisted to and loaded from there.
         """
         self.reference = "relay|" + name
         self.state_str = "No state set"
@@ -33,6 +33,16 @@ class Relay:
     def get_state(self) -> tuple:
         """ Returns a tuple with the reference name and the current relay state that is either 'on' or 'off' """
         return self.reference, self.state_str
+
+    def change_state(self, state: str):
+        if state == "on":
+            self.relay_on()
+        elif state == "off":
+            self.relay_off()
+        else:
+            error = "Relay - Error! Unrecognized relay state:" + state
+            print(error)
+            raise ValueError(error)
 
     def relay_on(self) -> None:
         """ Switches the relay on """
@@ -59,13 +69,7 @@ class Relay:
             with open(self.persist_path) as state:
                 loaded_state = state.readline()
             print("Relay - Loading state from path: {}".format(self.persist_path))
-            if loaded_state == "on":
-                self.relay_on()
-            elif loaded_state == "off":
-                self.relay_off()
-            else:
-                print("Error! Invalid state '{}' found on persist path: {}".format(loaded_state, self.persist_path))
-                self.relay_off()
+            self.change_state(loaded_state)
         except OSError:
             print("Relay - No persisted state exists yet at path: {}".format(self.persist_path))
             self.relay_off()
