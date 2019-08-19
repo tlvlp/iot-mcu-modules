@@ -25,9 +25,9 @@ class TempSensorDS18B20:
         """
         readings = await self.read_all_celsius(delay_ms)
         if len(readings) != 0:
-            return self.reference, readings[0]
+            return self.reference, str(readings[0])
         else:
-            return self.reference, -1.0
+            return self.reference, str(-1.0)
 
     async def read_all_celsius(self, delay_ms=750) -> list:
         """
