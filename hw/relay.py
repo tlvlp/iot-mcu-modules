@@ -12,7 +12,8 @@ class Relay:
         :param active_at: the relay is either active at a HIGH(1) or LOW(0) Pin state
         :param persist_path: if a path is provided the relay's state will be persisted to and loaded from there.
         """
-        self.reference = "relay|" + name
+        reference = "relay|"
+        self.id = reference + name
         self.state_str = "No state set"
         self.active_at = active_at
         self.persist_path = persist_path
@@ -32,7 +33,7 @@ class Relay:
 
     def get_state(self) -> tuple:
         """ Returns a tuple with the reference name and the current relay state that is either 'on' or 'off' """
-        return self.reference, self.state_str
+        return self.id, self.state_str
 
     def change_state(self, state: str):
         if state == "on":

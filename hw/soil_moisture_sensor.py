@@ -13,7 +13,8 @@ class SoilMoistureSensor:
         :param read_pin_num: Analog input pin number for reading measurements
         :param power_pin_num: Optional digital output pin number for controlling power to the sensor.
         """
-        self.reference = "somo|" + name
+        reference = "somo|"
+        self.id = reference + name
         self.power_control = False
         if power_pin_num is not None:
             self.power_control = True
@@ -33,7 +34,7 @@ class SoilMoistureSensor:
         analog_read = self.sensor.read()
         if self.power_control:
             self.power.off()
-        return self.reference, str(self.convert_to_percent(analog_read))
+        return self.id, str(self.convert_to_percent(analog_read))
 
     def convert_to_percent(self, reading) -> int:
         return int((1023 - reading) / 10.23)

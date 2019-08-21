@@ -12,7 +12,8 @@ class LightSensorGl5528:
         Tested on ESP32 MCUs
         :param pin_num: Analog input pin number for reading measurements
         """
-        self.reference = "gl5528|" + name
+        reference = "gl5528|"
+        self.id = reference + name
         self.sensor = ADC(Pin(pin_num, Pin.IN, Pin.PULL_DOWN))
         self.sensor.atten(ADC.ATTN_11DB)
         self.sensor.width(ADC.WIDTH_10BIT)
@@ -24,7 +25,7 @@ class LightSensorGl5528:
         """
         await asyncio.sleep_ms(delay_ms)
         analog_read = self.sensor.read()
-        return self.reference, str(self.convert_to_percent(analog_read))
+        return self.id, str(self.convert_to_percent(analog_read))
 
     def convert_to_percent(self, reading) -> int:
         return int((1023 - reading) / 10.23)
