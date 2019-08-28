@@ -25,7 +25,7 @@ class LightSensorGl5528:
         """
         await asyncio.sleep_ms(delay_ms)
         analog_read = self.sensor.read()
-        return self.id, str(self.convert_to_percent(analog_read))
+        return self.id, self.convert_to_percent(analog_read)
 
     def convert_to_percent(self, reading) -> int:
         return int((1023 - reading) / 10.23)

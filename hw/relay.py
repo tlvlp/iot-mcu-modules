@@ -14,16 +14,16 @@ class Relay:
         """
         reference = "relay|"
         self.id = reference + name
-        self.state_str = "No state set"
         self.active_at = active_at
         self.persist_path = persist_path
         self.pin = Pin(pin_num, Pin.OUT, value=self.get_off_state())
+        self.state = 0
         if persist_path is None:
             self.state_is_persisted = False
             self.relay_off()
         else:
             self.state_is_persisted = True
-            self.load_state()
+            self.load_state_from_file()
 
     def get_off_state(self) -> int:
         if self.active_at == 0:
@@ -32,16 +32,16 @@ class Relay:
             return 0
 
     def get_state(self) -> tuple:
-        """ Returns a tuple with the reference name and the current relay state that is either 'on' or 'off' """
-        return self.id, self.state_str
+        """ Returns a tuple with the reference name and the current relay state that is either 1 (on) or 0 (off) """
+        return self.id, self.state
 
-    def change_state(self, state: str):
-        if state == "on":
+    def set_state(self, state: int):
+        if int(state) == 1:
             self.relay_on()
-        elif state == "off":
+        elif int(state) == 0:
             self.relay_off()
         else:
-            error = "Relay - Error! Unrecognized relay state:" + state
+            error = "Relay - Error! Unrecognized relay state:" + str(state)
             print(error)
             raise ValueError(error)
 
@@ -51,9 +51,9 @@ class Relay:
             self.pin.on()
         else:
             self.pin.off()
-        self.state_str = "on"
+        self.state = 1
         if self.state_is_persisted:
-            self.persist_state()
+            self.save_state_to_file()
 
     def relay_off(self) -> None:
         """ Switches the relay off """
@@ -61,21 +61,21 @@ class Relay:
             self.pin.off()
         else:
             self.pin.on()
-        self.state_str = "off"
+        self.state = 0
         if self.state_is_persisted:
-            self.persist_state()
+            self.save_state_to_file()
 
-    def load_state(self) -> None:
+    def load_state_from_file(self) -> None:
         try:
-            with open(self.persist_path) as state:
-                loaded_state = state.readline()
+            with open(self.persist_path) as stateFile:
+                loaded_state = int(stateFile.readline())
             print("Relay - Loading state from path: {}".format(self.persist_path))
-            self.change_state(loaded_state)
+            self.set_state(loaded_state)
         except OSError:
             print("Relay - No persisted state exists yet at path: {}".format(self.persist_path))
             self.relay_off()
 
-    def persist_state(self) -> None:
+    def save_state_to_file(self) -> None:
         with open(self.persist_path, "w+") as state:
-            state.write(self.state_str)
+            state.write(str(self.state))
 
