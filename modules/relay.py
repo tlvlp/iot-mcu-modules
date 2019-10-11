@@ -1,4 +1,5 @@
 from machine import Pin
+from modules.exceptions import InvalidModuleInputException
 
 
 class Relay:
@@ -30,6 +31,17 @@ class Relay:
             return 1
         else:
             return 0
+
+    def get_module_id(self) -> str:
+        return self.id
+
+    def handle_control_message(self, value: int):
+        if value == 1:
+            self.relay_on()
+        elif value == 0:
+            self.relay_off()
+        else:
+            raise InvalidModuleInputException
 
     def get_state(self) -> tuple:
         """ Returns a tuple with the reference name and the current relay state that is either 1 (on) or 0 (off) """
