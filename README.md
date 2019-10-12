@@ -46,6 +46,7 @@ The skeleton project in this repository already supports it.
 | Description | Requests a status update from all subscribed MCUs, who must respond by sending a status update to the global status topic |
 | Who publishes here? | Server side |
 | Who subscirbes here? | All MCUs |
+
 Payload format:
 >The payload is ignored, an empty string is recommended.
 ```
@@ -62,6 +63,7 @@ Payload format:
 || The Unit whose details are sent to this topic will be flagged as inactive. |
 | Who publishes here? | MQTT broker on behalf of the MCUs |
 | Who subscirbes here? | Server side |
+
 Payload format:
 ```json
 {
