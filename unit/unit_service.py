@@ -72,7 +72,7 @@ class UnitService:
             payload = ujson.loads(payload_json)
             if payload is None:
                 await self.send_error_to_server("Unit service - Error parsing payload!")
-            module = payload.keys()[0]
+            module = next(iter(payload))
             value = payload.get(module)
             ##################################################################
             # TODO: Check for each controllable module's ID and pass the

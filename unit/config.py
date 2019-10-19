@@ -17,7 +17,6 @@ post_status_interval_sec = 600
 wifi_ssid = "PLACEHOLDER"  # TODO: Fill wifi access details
 wifi_password = "PLACEHOLDER"  # TODO: Fill wifi access details
 wifi_connection_check_interval_sec = 1
-wifi_ip = "PLACEHOLDER"  # TODO: Fill wifi access details
 
 # MQTT
 mqtt_connection_check_interval_sec = 1
