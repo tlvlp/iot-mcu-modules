@@ -1,5 +1,8 @@
 # IoT MCU Modules
 
+## LEGACY REPOSITORY!
+This repository is no longer maintained. See the [project summary page](https://github.com/tlvlp/iot-project-summary) for details and updates.
+
 ## Summary
 - Part of the [tlvlp IoT project](https://github.com/tlvlp/iot-project-summary)
 - Template for the MCU side API of the services
